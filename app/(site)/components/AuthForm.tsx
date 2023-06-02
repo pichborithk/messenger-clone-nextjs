@@ -2,9 +2,9 @@
 
 // import axios from 'axios';
 // import { signIn, useSession } from 'next-auth/react';
-import { useCallback, useEffect, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { BsGithub, BsGoogle } from 'react-icons/bs';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+// import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 // import { toast } from 'react-hot-toast';
 
@@ -14,11 +14,20 @@ import Button from '@/app/components/Button';
 
 type Variant = 'LOGIN' | 'REGISTER';
 
+type SubmitData = {
+  name?: string;
+  email: string;
+  password: string;
+};
+
 const AuthForm = () => {
   // const session = useSession();
   const router = useRouter();
   const [variant, setVariant] = useState<Variant>('LOGIN');
   const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   // useEffect(() => {
   //   if (session?.status === 'authenticated') {
@@ -32,62 +41,56 @@ const AuthForm = () => {
     } else {
       setVariant('LOGIN');
     }
+    setName('');
+    setEmail('');
+    setPassword('');
   }, [variant]);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FieldValues>({
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-    },
-  });
+  function handleSubmit(data: SubmitData) {
+    return async function (event: FormEvent<HTMLFormElement>) {
+      event.preventDefault();
+      setIsLoading(true);
 
-  const onSubmit: SubmitHandler<FieldValues> = data => {
-    setIsLoading(true);
+      // if (variant === 'REGISTER') {
+      //   axios
+      //     .post('/api/register', data)
+      //     .then(() =>
+      //       signIn('credentials', {
+      //         ...data,
+      //         redirect: false,
+      //       })
+      //     )
+      //     .then(callback => {
+      //       if (callback?.error) {
+      //         toast.error('Invalid credentials!');
+      //       }
 
-    // if (variant === 'REGISTER') {
-    //   axios
-    //     .post('/api/register', data)
-    //     .then(() =>
-    //       signIn('credentials', {
-    //         ...data,
-    //         redirect: false,
-    //       })
-    //     )
-    //     .then(callback => {
-    //       if (callback?.error) {
-    //         toast.error('Invalid credentials!');
-    //       }
+      //       if (callback?.ok) {
+      //         router.push('/conversations');
+      //       }
+      //     })
+      //     .catch(() => toast.error('Something went wrong!'))
+      //     .finally(() => setIsLoading(false));
+      // }
 
-    //       if (callback?.ok) {
-    //         router.push('/conversations');
-    //       }
-    //     })
-    //     .catch(() => toast.error('Something went wrong!'))
-    //     .finally(() => setIsLoading(false));
-    // }
+      // if (variant === 'LOGIN') {
+      //   signIn('credentials', {
+      //     ...data,
+      //     redirect: false,
+      //   })
+      //     .then(callback => {
+      //       if (callback?.error) {
+      //         toast.error('Invalid credentials!');
+      //       }
 
-    // if (variant === 'LOGIN') {
-    //   signIn('credentials', {
-    //     ...data,
-    //     redirect: false,
-    //   })
-    //     .then(callback => {
-    //       if (callback?.error) {
-    //         toast.error('Invalid credentials!');
-    //       }
-
-    //       if (callback?.ok) {
-    //         router.push('/conversations');
-    //       }
-    //     })
-    //     .finally(() => setIsLoading(false));
-    // }
-  };
+      //       if (callback?.ok) {
+      //         router.push('/conversations');
+      //       }
+      //     })
+      //     .finally(() => setIsLoading(false));
+      // }
+    };
+  }
 
   const socialAction = (action: string) => {
     setIsLoading(true);
@@ -108,31 +111,34 @@ const AuthForm = () => {
   return (
     <div className='mt-8 sm:mx-auto sm:w-full sm:max-w-md'>
       <div className=' bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10'>
-        <form className='space-y-6' onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className='space-y-6'
+          onSubmit={handleSubmit({ name, email, password })}
+        >
           {variant === 'REGISTER' && (
             <Input
               disabled={isLoading}
-              register={register}
-              errors={errors}
-              required
+              value={name}
+              setValue={setName}
+              required={true}
               id='name'
               label='Name'
             />
           )}
           <Input
             disabled={isLoading}
-            register={register}
-            errors={errors}
-            required
+            value={email}
+            setValue={setEmail}
+            required={true}
             id='email'
             label='Email address'
             type='email'
           />
           <Input
             disabled={isLoading}
-            register={register}
-            errors={errors}
-            required
+            value={password}
+            setValue={setPassword}
+            required={true}
             id='password'
             label='Password'
             type='password'
