@@ -4,24 +4,22 @@
 import { Dispatch, SetStateAction } from 'react';
 // import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
 
-interface InputProps {
+interface Props {
   label: string;
   id: string;
   type?: string;
   required?: boolean;
   value: string;
   setValue: Dispatch<SetStateAction<string>>;
-  // onChange: () => void;
   disabled?: boolean;
 }
 
-const Input = (props: InputProps) => {
+const Input = (props: Props) => {
   const {
     label,
     id,
     value,
     setValue,
-    // onChange,
     required,
     type = 'text',
     disabled,
