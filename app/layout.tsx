@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google';
 
 import './globals.css';
 import ToasterContext from './context/ToasterContext';
+import AuthContext from './context/AuthContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -14,8 +15,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang='en'>
       <body className={inter.className}>
-        {children}
-        <ToasterContext />
+        <AuthContext>
+          {children}
+          <ToasterContext />
+        </AuthContext>
       </body>
     </html>
   );
