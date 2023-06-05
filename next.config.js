@@ -7,6 +7,9 @@ const nextConfig = {
       'lh3.googleusercontent.com',
     ],
   },
+  experimental: {
+    swcPlugins: ['next-superjson-plugin', {}],
+  },
 };
 
 module.exports = nextConfig;
