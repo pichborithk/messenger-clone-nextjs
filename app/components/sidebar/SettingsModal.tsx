@@ -30,7 +30,7 @@ const SettingsModal = ({ isOpen, onClose, currentUser }: Props) => {
   const [name, setName] = useState(currentUser.name!);
   const [image, setImage] = useState(currentUser.image!);
 
-  console.log(currentUser, '&TEST_CURRENT_USER');
+  // console.log(currentUser, '&TEST_CURRENT_USER');
 
   const handleUpload = (result: any) => {
     setImage(result?.info?.secure_url);
