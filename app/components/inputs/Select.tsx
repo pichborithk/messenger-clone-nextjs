@@ -1,34 +1,33 @@
 'use client';
 
-import ReactSelect from 'react-select';
+import { Dispatch, SetStateAction } from 'react';
+import ReactSelect, { MultiValue } from 'react-select';
+
+interface Member {
+  value: string;
+  label: string;
+}
 
 interface Props {
   label: string;
-  value?: Record<string, any>;
-  onChange: (value: Record<string, any>) => void;
-  options: Record<string, any>[];
+  value?: Member[];
+  // onChange: (value: Record<string, any>) => void;
+  setValue: Dispatch<SetStateAction<Member[]>>;
+  options: Member[];
   disabled?: boolean;
 }
 
-const Select = ({ label, value, onChange, options, disabled }: Props) => {
+const Select = ({ label, value, setValue, options, disabled }: Props) => {
   return (
     <div className='z-[100]'>
-      <label
-        className='
-          block 
-          text-sm 
-          font-medium 
-          leading-6 
-          text-gray-900
-        '
-      >
+      <label className='block text-sm font-medium leading-6 text-gray-900'>
         {label}
       </label>
       <div className='mt-2'>
         <ReactSelect
           isDisabled={disabled}
           value={value}
-          onChange={onChange}
+          onChange={(value: any) => setValue(value)}
           isMulti
           options={options}
           menuPortalTarget={document.body}
